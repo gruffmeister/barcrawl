@@ -27,7 +27,7 @@ const ToggleTextImage = () => {
   };
 
   const handleAuth = () => {
-    if (password === "q1w2e3r4") {
+    if (password === "1234") {
       setAuthenticated(true);
     } else {
       alert("Incorrect password!");
@@ -40,7 +40,7 @@ const ToggleTextImage = () => {
         <img
           src={
             view === 1
-              ? "https://cdn.dribbble.com/users/769413/screenshots/2403227/beerguy3.gif" 
+              ? "https://cdn.dribbble.com/users/769413/screenshots/2403227/beerguy3.gif"
               : "https://media.tenor.com/PCXyUgpZAOkAAAAM/run-fat.gif"
           }
           alt={altText}
@@ -87,10 +87,15 @@ const ToggleTextImage = () => {
   );
 };
 
-// Styles for mobile-friendly left alignment
+// Styles for black background and white text
 const containerStyle = {
+  backgroundColor: "#000",
+  color: "#fff",
   textAlign: "left",
   margin: "20px",
+  padding: "20px",
+  borderRadius: "8px",
+  maxWidth: "500px",
 };
 
 const contentStyle = {
@@ -106,7 +111,7 @@ const imageStyle = {
 
 const textStyle = {
   fontSize: "18px",
-  color: "#333",
+  color: "#fff",
   margin: "10px 0",
 };
 
@@ -116,6 +121,10 @@ const inputStyle = {
   fontSize: "16px",
   width: "90%",
   maxWidth: "400px",
+  backgroundColor: "#222",
+  color: "#fff",
+  border: "1px solid #444",
+  borderRadius: "5px",
   display: "block",
 };
 
@@ -125,6 +134,10 @@ const altTextStyle = {
   fontSize: "14px",
   width: "90%",
   maxWidth: "400px",
+  backgroundColor: "#222",
+  color: "#fff",
+  border: "1px solid #444",
+  borderRadius: "5px",
   display: "block",
 };
 
@@ -139,6 +152,10 @@ const passwordStyle = {
   fontSize: "16px",
   width: "70%",
   maxWidth: "250px",
+  backgroundColor: "#222",
+  color: "#fff",
+  border: "1px solid #444",
+  borderRadius: "5px",
 };
 
 const authButtonStyle = {
