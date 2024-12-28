@@ -1,18 +1,24 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import AWS from "aws-sdk";
 
-const ToggleTextImage = () => {
-  const [view, setView] = useState(1);
+const S3TextManager = () => {
   const [inputText, setInputText] = useState("Golden Lion");
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
   const [altText, setAltText] = useState("Drinking at this bar");
+  const [view, setView] = useState(1);  // Store toggle state (View 1 or View 2)
 
-  const handleToggle = () => {
-    setView(view === 1 ? 2 : 1);
-    setAltText(view === 1 ? "Moving to this bar" : "Drinking at this bar");
-  };
+  // Configure AWS
+  AWS.config.update({
+    accessKeyId: 'AKIATXOYXYWZUGQSRSNI',
+    secretAccessKey: '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',
+    region: 'eu-west-2'
+  });
+
+  const s3 = new AWS.S3();
+  const bucketName = 'barcrawl-lancaster';
 
   const handleInputChange = (e) => {
     setInputText(e.target.value);
@@ -34,15 +40,61 @@ const ToggleTextImage = () => {
     }
   };
 
+  const handleSaveToS3 = () => {
+    const dataToSave = {
+      inputText,
+      view,  // Save the toggle status (view state)
+    };
+
+    const params = {
+      Bucket: bucketName,
+      Key: "stateData.json",  // Store both text and view state
+      Body: JSON.stringify(dataToSave),  // Convert the data to a JSON string
+      ContentType: "application/json",
+    };
+
+    s3.upload(params, (err, data) => {
+      if (err) {
+        console.error("Error uploading data: ", err);
+      } else {
+        console.log("Successfully uploaded data to S3", data);
+      }
+    });
+  };
+
+  const handleLoadFromS3 = () => {
+    const params = {
+      Bucket: bucketName,
+      Key: "stateData.json",  // Load the state data
+    };
+
+    s3.getObject(params, (err, data) => {
+      if (err) {
+        console.error("Error fetching data from S3: ", err);
+      } else {
+        const fileContent = JSON.parse(data.Body.toString("utf-8"));
+        setInputText(fileContent.inputText);  // Load text data
+        setView(fileContent.view);  // Load toggle state
+      }
+    });
+  };
+
+  useEffect(() => {
+    // Load text data and toggle state from S3 when the component mounts
+    handleLoadFromS3();
+  }, []);
+
+  const handleToggle = () => {
+    const newView = view === 1 ? 2 : 1;
+    setView(newView);
+  };
+
   return (
     <div style={containerStyle}>
       <div style={contentStyle}>
         <img
-          src={
-            view === 1
-              ? "https://cdn.dribbble.com/users/769413/screenshots/2403227/beerguy3.gif"
-              : "https://media.tenor.com/PCXyUgpZAOkAAAAM/run-fat.gif"
-          }
+          src={view === 1 ? "https://cdn.dribbble.com/users/769413/screenshots/2403227/beerguy3.gif"
+            : "https://media.tenor.com/PCXyUgpZAOkAAAAM/run-fat.gif"}
           alt={altText}
           style={imageStyle}
         />
@@ -81,18 +133,21 @@ const ToggleTextImage = () => {
           <button onClick={handleToggle} style={toggleButtonStyle}>
             Toggle View
           </button>
+          <button onClick={handleSaveToS3} style={saveButtonStyle}>
+            Save to S3
+          </button>
         </>
       )}
     </div>
   );
 };
 
-// Styles for black background and white text
+// Styles (same as previous)
 const containerStyle = {
-  backgroundColor: "#000",
-  color: "#fff",
   textAlign: "left",
   margin: "20px",
+  backgroundColor: "#000",
+  color: "#fff",
   padding: "20px",
   borderRadius: "8px",
   maxWidth: "500px",
@@ -179,4 +234,15 @@ const toggleButtonStyle = {
   marginTop: "20px",
 };
 
-export default ToggleTextImage;
+const saveButtonStyle = {
+  padding: "10px 20px",
+  fontSize: "16px",
+  cursor: "pointer",
+  border: "none",
+  backgroundColor: "#ff9900",
+  color: "white",
+  borderRadius: "5px",
+  marginTop: "20px",
+};
+
+export default S3TextManager;
