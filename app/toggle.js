@@ -12,7 +12,7 @@ const S3TextManager = () => {
 
   // Configure AWS
   AWS.config.update({
-  
+  //
   });
 
   const s3 = new AWS.S3();
