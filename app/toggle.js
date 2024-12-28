@@ -12,7 +12,9 @@ const S3TextManager = () => {
 
   // Configure AWS
   AWS.config.update({
-  //
+    accessKeyId: 'AKIATXOYXYWZUGQSRSNI',
+    secretAccessKey: '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',
+    region: 'eu-west-2'
   });
 
   const s3 = new AWS.S3();
