@@ -4,14 +4,14 @@ import React, { useState } from "react";
 
 const ToggleTextImage = () => {
   const [view, setView] = useState(1);
-  const [inputText, setInputText] = useState("Current bar");
+  const [inputText, setInputText] = useState("Golden Lion");
   const [password, setPassword] = useState("");
   const [authenticated, setAuthenticated] = useState(false);
-  const [altText, setAltText] = useState("View 1 Image");
+  const [altText, setAltText] = useState("Drinking at this bar");
 
   const handleToggle = () => {
     setView(view === 1 ? 2 : 1);
-    setAltText(view === 1 ? "Drinking at this bar" : "Moving to this bar");
+    setAltText(view === 1 ? "Moving to this bar" : "Drinking at this bar");
   };
 
   const handleInputChange = (e) => {
@@ -27,7 +27,7 @@ const ToggleTextImage = () => {
   };
 
   const handleAuth = () => {
-    if (password === "1234") {
+    if (password === "q1w2e3r4") {
       setAuthenticated(true);
     } else {
       alert("Incorrect password!");
@@ -40,8 +40,8 @@ const ToggleTextImage = () => {
         <img
           src={
             view === 1
-              ? "https://media.tenor.com/PCXyUgpZAOkAAAAM/run-fat.gif"
-              : "https://cdn.dribbble.com/users/769413/screenshots/2403227/beerguy3.gif"
+              ? "https://cdn.dribbble.com/users/769413/screenshots/2403227/beerguy3.gif" 
+              : "https://media.tenor.com/PCXyUgpZAOkAAAAM/run-fat.gif"
           }
           alt={altText}
           style={imageStyle}
